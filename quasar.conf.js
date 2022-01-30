@@ -11,6 +11,16 @@ const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers');
 
 module.exports = configure(function (ctx) {
+  const APP = {
+    version: '0.0.1',
+    name: 'Terminal',
+    contact: {
+      mail: 'sebastienduclut735@gmail.com',
+      phone: '06.28.94.39.92',
+      linkedIn: 'https://www.linkedin.com/in/sebastien-duclut/',
+      gitHub: 'https://github.com/Seb735'
+    }
+  }
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -47,6 +57,9 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
+      env: {
+        APP
+      },
       // transpile: false,
       // publicPath: '/',
 
@@ -110,10 +123,10 @@ module.exports = configure(function (ctx) {
       // manualPostHydrationTrigger: true,
 
       prodPort: 3000, // The default port that the production server should use
-                      // (gets superseded if process.env.PORT is specified at runtime)
+      // (gets superseded if process.env.PORT is specified at runtime)
 
       maxAge: 1000 * 60 * 60 * 24 * 30,
-        // Tell browser when a file from the server should expire from cache (in ms)
+      // Tell browser when a file from the server should expire from cache (in ms)
 
       chainWebpackWebserver (chain) {
         chain.plugin('eslint-webpack-plugin')
