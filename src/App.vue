@@ -26,11 +26,13 @@
           ref="inputLine"
           v-model="inputCommand"
           type="text"
-          :prefix="prefix"
+          :prefix="`$ ${prompt}`"
           autofocus
           dense
           borderless
-          @keyup.enter.prevent="commandEntry"
+          @keyup.enter="commandEntry"
+          @keyup.up="handleEvent"
+          @keyup.down="handleEvent"
           />
       </div>
     </div>
@@ -49,12 +51,11 @@ export default {
       messageList: [],
       indexHistory: 0,
       commandHistory: [],
-      prefix: '$ ~ '
+      prompt: '~> '
     }
   },
   computed: {
     ...storeCommand.mapGetters({
-      existCommand: 'existCommand',
       getMessagesCommand: 'getMessagesCommand',
       getDescriptionCommand: 'getDescriptionCommand'
     })
@@ -69,20 +70,14 @@ export default {
     }
   },
   methods: {
-    commandEntry (evt) {
-
-      if (evt.keyCode !== 13) {
-        console.log(evt)
-        this.handleEvent(evt)
-      }
-
-      if(!this.inputCommand) {
-        this.messageList.push(this.inputCommand)
+    commandEntry () {
+      if (!this.inputCommand) {
+        this.pushToList()
         return
       }
 
       this.commandHistory.push(this.inputCommand)
-      this.historyIndex = this.commandHistory.length
+      this.indexHistory = this.commandHistory.length
 
       if (this.inputCommand === 'clear'){
         this.messageList = []
@@ -91,33 +86,33 @@ export default {
       if (this.inputCommand === 'help') {
         const descriptionCommand = this.getDescriptionCommand
         _.forEach(descriptionCommand, (description, command) => {
-          this.messageList.push(`"${command}" : ${description}`)
+          this.pushToList(`"${command}" ----> ${description}`)
         })
         return
       }
 
       const messagesCommand = this.getMessagesCommand(this.inputCommand)
-      console.log(messagesCommand)
-
-      this.messageList.push(this.prefix + this.inputCommand)
+      this.messageList.push(this.inputCommand)
       _.forEach(messagesCommand, (msg) => {
-        this.messageList.push(msg)
+        this.pushToList(msg)
       })
-    }
-  },
-  handleEvent (evt) {
-    console.log(evt)
-    switch (evt.keyCode) {
-      case 38: // Arrow up
-        this.historyIndex = this.historyIndex === 0 ? 0 : this.historyIndex - 1
-        this.inputCommand = this.commandHistory[this.historyIndex]
-        break;
-      case 40: // Arrow down
-        this.historyIndex = this.historyIndex === this.commandHistory.length ? this.commandHistory.length : this.historyIndex + 1
-        this.inputCommand = this.commandHistory[this.historyIndex]
-        break;
-      default:
-        break;
+    },
+    handleEvent (evt) {
+      switch (evt.key) {
+        case 'ArrowUp':
+          this.indexHistory = this.indexHistory === 0 ? 0 : this.indexHistory - 1
+          this.inputCommand = this.commandHistory[this.indexHistory]
+          break;
+        case 'ArrowDown':
+          this.indexHistory = this.indexHistory === this.commandHistory.length ? this.commandHistory.length : this.indexHistory + 1
+          this.inputCommand = this.commandHistory[this.indexHistory]
+          break;
+        default:
+          break;
+      }
+    },
+    pushToList (msg = '') {
+      this.messageList.push(`${this.prompt} ${msg}`)
     }
   }
 }
