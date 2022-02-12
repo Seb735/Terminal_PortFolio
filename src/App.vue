@@ -1,8 +1,14 @@
 <template>
-    <div class="terminal">
-      <div class="header">
-        HEADER
-      </div>
+  <div class="terminal">
+    <div class="terminal-header">
+      <h6>{{title}}</h6>
+      <q-icon
+        class="icon-close"
+        color="red"
+        name="fas fa-times-circle"
+      />
+    </div>
+    <div class="terminal-window">
       <div
         v-if="messageList.length > 0"
         class="msg"
@@ -25,17 +31,18 @@
         <q-input
           ref="inputLine"
           v-model="inputCommand"
+          class="input-box"
           type="text"
           :prefix="`$ ${prompt}`"
           autofocus
           dense
           borderless
           @keyup.enter="commandEntry"
-          @keyup.up="handleEvent"
-          @keyup.down="handleEvent"
-          />
+          @keyup="handleEvent"
+        />
       </div>
     </div>
+  </div>
 </template>
 <script>
 
@@ -47,6 +54,7 @@ export default {
   name: 'App',
   data () {
     return {
+      title: `${process.env.APP.name}`,
       inputCommand: '',
       messageList: [],
       indexHistory: 0,
@@ -63,8 +71,7 @@ export default {
   watch: {
     messageList: {
       deep: true,
-      handler (v) {
-        console.log(v)
+      handler () {
         this.inputCommand = ''
       }
     }
@@ -72,7 +79,7 @@ export default {
   methods: {
     commandEntry () {
       if (!this.inputCommand) {
-        this.pushToList()
+        this.pushToList(this.prompt)
         return
       }
 
@@ -92,7 +99,7 @@ export default {
       }
 
       const messagesCommand = this.getMessagesCommand(this.inputCommand)
-      this.messageList.push(this.inputCommand)
+      this.pushToList(`${this.prompt} ${this.inputCommand}`)
       _.forEach(messagesCommand, (msg) => {
         this.pushToList(msg)
       })
@@ -112,7 +119,7 @@ export default {
       }
     },
     pushToList (msg = '') {
-      this.messageList.push(`${this.prompt} ${msg}`)
+      this.messageList.push(msg)
     }
   }
 }
@@ -120,9 +127,50 @@ export default {
 
 <style lang="scss" scoped>
 .terminal {
-  background-color: rgba(54, 98, 36, 0.75);
-  height: 100%;
-  width: 100%;
+  position: relative;
+  width: 70vw;
+  border-radius: 4px;
+  height: 70vh;
+  text-overflow: ellipsis;
+  overflow: auto;
 }
+
+.terminal-header {
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  border-radius: 10px 10px 0 0;
+
+  h6 {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .icon-close {
+    align-self: center;
+    margin-right: 15px;
+
+  }
+}
+
+.terminal-window {
+  background-color: gray;
+  height: 65vh;
+  border-radius: 0 0 10px 10px;
+  color: white;
+
+}
+
+.terminal .terminal-window .cursor {
+  margin: 0;
+  background-color: white;
+  animation: blink 1s step-end infinite;
+  -webkit-animation: blink 1s step-end infinite;
+  margin-left: -5px;
+}
+
 
 </style>

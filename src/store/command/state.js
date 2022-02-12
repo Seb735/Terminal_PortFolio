@@ -10,17 +10,17 @@ export default {
     command: 'contact',
     description: 'Moyen permettant de contacter le créateur',
     messages: [
-        `Téléphone: ${process.env.APP.contact.phone}`,
-        `Mail: ${process.env.APP.contact.mail}`,
-        `LinkedIn: ${process.env.APP.contact.linkedIn}`,
-        `GitHub: ${process.env.APP.contact.gitHub}`
+      `Téléphone: ${process.env.APP.contact.phone}`,
+      `Mail: ${process.env.APP.contact.mail}`,
+      `LinkedIn: ${process.env.APP.contact.linkedIn}`,
+      `GitHub: ${process.env.APP.contact.gitHub}`
     ]
   },
   version: {
     command: 'version',
     description: 'Retourne la version actuelle du terminal',
     messages: [
-        `La version est ${process.env.APP.version}`
+      `La version est ${process.env.APP.version}`
     ]
   },
   clear: {
