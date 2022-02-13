@@ -1,5 +1,9 @@
 <template>
-  <div class="terminal">
+  <div
+    class="terminal"
+    @click="toFocus"
+  >
+
     <div class="terminal-header">
       <h6>{{title}}</h6>
       <q-icon
@@ -8,18 +12,18 @@
         name="fas fa-times-circle"
       />
     </div>
-    <div class="terminal-window">
+
+    <div class="terminal-window q-pt-sm">
+
       <div
         v-if="messageList.length > 0"
-        class="msg"
+        class="msg q-px-sm"
       >
-        <q-list
-          dense
-        >
+        <q-list>
           <q-item
             v-for="(message, index) in messageList"
             :key="index"
-            dense
+            class="messageLine q-pl-sm q-py-none"
           >
             <q-item-section>
               {{ message }}
@@ -27,21 +31,26 @@
           </q-item>
         </q-list>
       </div>
-      <div class="cmd">
+
+      <div class="cmd q-px-sm">
         <q-input
-          ref="inputLine"
-          v-model="inputCommand"
-          class="input-box"
-          type="text"
-          :prefix="`$ ${prompt}`"
-          autofocus
-          dense
-          borderless
-          @keyup.enter="commandEntry"
-          @keyup="handleEvent"
-        />
+        ref="inputLine"
+        v-model="inputCommand"
+        class="input-box"
+        type="text"
+        dense
+        borderless
+        @keyup.enter="commandEntry"
+        @keyup="handleEvent"
+      />
+        <div class="displayCmd">
+          <span class="q-pr-xs">$  {{ prompt }}</span><span> {{ inputCommand }}</span><span class="cursor"></span>
+        </div>
+
       </div>
+
     </div>
+
   </div>
 </template>
 <script>
@@ -59,7 +68,7 @@ export default {
       messageList: [],
       indexHistory: 0,
       commandHistory: [],
-      prompt: '~> '
+      prompt: '~>'
     }
   },
   computed: {
@@ -77,6 +86,9 @@ export default {
     }
   },
   methods: {
+    toFocus() {
+      this.$refs.inputLine.focus()
+    },
     commandEntry () {
       if (!this.inputCommand) {
         this.pushToList(this.prompt)
@@ -91,6 +103,7 @@ export default {
         return
       }
       if (this.inputCommand === 'help') {
+        this.pushToList(`${this.prompt} ${this.inputCommand}`)
         const descriptionCommand = this.getDescriptionCommand
         _.forEach(descriptionCommand, (description, command) => {
           this.pushToList(`"${command}" ----> ${description}`)
@@ -126,51 +139,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.terminal {
-  position: relative;
-  width: 70vw;
-  border-radius: 4px;
-  height: 70vh;
-  text-overflow: ellipsis;
-  overflow: auto;
-}
-
-.terminal-header {
-  background-color: black;
-  color: white;
-  display: flex;
-  justify-content: flex-end;
-  border-radius: 10px 10px 0 0;
-
-  h6 {
-    margin: 0;
-    width: 100%;
-    text-align: center;
-    letter-spacing: 1px;
-  }
-
-  .icon-close {
-    align-self: center;
-    margin-right: 15px;
-
-  }
-}
-
-.terminal-window {
-  background-color: gray;
-  height: 65vh;
-  border-radius: 0 0 10px 10px;
-  color: white;
-
-}
-
-.terminal .terminal-window .cursor {
-  margin: 0;
-  background-color: white;
-  animation: blink 1s step-end infinite;
-  -webkit-animation: blink 1s step-end infinite;
-  margin-left: -5px;
-}
-
-
 </style>

@@ -10,3 +10,77 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.terminal {
+  position: relative;
+  width: 70vw;
+  border-radius: 4px;
+  height: 70vh;
+  text-overflow: ellipsis;
+  overflow: auto;
+}
+
+.terminal-header {
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  border-radius: 10px 10px 0 0;
+
+  h6 {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .icon-close {
+    align-self: center;
+    margin-right: 15px;
+
+  }
+}
+
+.terminal-window {
+  background-color: gray;
+  height: 65vh;
+  border-radius: 0 0 10px 10px;
+  color: white;
+
+  .messageLine {
+  }
+
+  .input-box {
+    display: inline;
+    position: absolute;
+    width: 0;
+    caret-color: transparent;
+  }
+  .cursor {
+    display: inline-block;
+    margin-left: 2px;
+    width: 10px;
+    height: 17px;
+    vertical-align: middle;
+    background: white;
+    animation: blink 1s infinite step-end;
+    -webkit-animation: blink 1s infinite step-end;
+  }
+
+  @keyframes blink {
+    50% {
+      visibility: hidden;
+    }
+  }
+
+  @-webkit-keyframes blink {
+    50% {
+      visibility: hidden;
+    }
+  }
+}
+
+.displayCmd {
+  display: flex;
+  align-items: center;
+}

@@ -1,10 +1,36 @@
 export default {
+  welcome: {
+    messages: [
+    ]
+  },
   about: {
     command: 'about',
     description: 'À propos du créateur',
     messages: [
-
+      // {
+      //   class: ``,
+      //   text:`Bla bla bla`
+      // }
     ]
+  },
+  projects: {
+    command: `projects`,
+    description: `Liste les projets personnels et professionnels`,
+    messages: [
+      `Veuillez préciser le type de projets que vous souhaitez voir`,
+      `--personal  Pour les projets personnels`,
+      `--work  Pour les projets professionnels`
+    ],
+    subCommands: {
+      personnal: {
+        messages: []
+      },
+      work: {
+        messages: [
+          `Seku`
+        ]
+      }
+    }
   },
   contact: {
     command: 'contact',
