@@ -7,9 +7,11 @@ export default {
   // Récupère les descriptions des commandes
   getDescriptionCommand: (state) => {
     const descriptionCommand = {}
-    _.map(state, (s) => {
-      descriptionCommand[s.command] = s.description
-    })
+    _.map(
+      _.filter(state, (st) => st.command),
+      (s) => {
+        descriptionCommand[s.command] = s.description
+      })
     return descriptionCommand
   },
 

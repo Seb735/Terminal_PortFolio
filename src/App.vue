@@ -23,10 +23,18 @@
           <q-item
             v-for="(message, index) in messageList"
             :key="index"
-            class="messageLine q-pl-sm q-py-none"
+            class="q-pl-sm q-py-none"
           >
-            <q-item-section>
-              {{ message }}
+            <q-item-section
+              class="messageLine"
+            >
+              <span
+                v-if="message.label"
+                :class="`${message.type} q-pl-sm`"
+              >
+                {{ `${message.label} : `}}
+              </span>
+              <span class="q-pl-sm">{{ message.text }}</span>
             </q-item-section>
           </q-item>
         </q-list>
@@ -103,16 +111,16 @@ export default {
         return
       }
       if (this.inputCommand === 'help') {
-        this.pushToList(`${this.prompt} ${this.inputCommand}`)
+        this.pushToList({text: `${this.prompt} ${this.inputCommand}`})
         const descriptionCommand = this.getDescriptionCommand
         _.forEach(descriptionCommand, (description, command) => {
-          this.pushToList(`"${command}" ----> ${description}`)
+          this.pushToList({label: command, text:description})
         })
         return
       }
 
       const messagesCommand = this.getMessagesCommand(this.inputCommand)
-      this.pushToList(`${this.prompt} ${this.inputCommand}`)
+      this.pushToList({text: `${this.prompt} ${this.inputCommand}`})
       _.forEach(messagesCommand, (msg) => {
         this.pushToList(msg)
       })
@@ -131,7 +139,7 @@ export default {
           break;
       }
     },
-    pushToList (msg = '') {
+    pushToList (msg = {}) {
       this.messageList.push(msg)
     }
   }

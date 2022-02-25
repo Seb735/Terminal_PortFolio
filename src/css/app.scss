@@ -48,6 +48,8 @@ body {
   color: white;
 
   .messageLine {
+    flex-direction: row;
+    justify-content: start;
   }
 
   .input-box {
